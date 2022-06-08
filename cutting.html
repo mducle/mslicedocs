@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2. Taking Cuts &#8212; MSlice 2.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Taking Slices" href="slicing.html" />
+    <link rel="prev" title="1. Quick Start" href="quickstart.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="slicing.html" title="3. Taking Slices"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="1. Quick Start"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MSlice 2.3.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Taking Cuts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="taking-cuts">
+<h1><span class="section-number">2. </span>Taking Cuts<a class="headerlink" href="#taking-cuts" title="Permalink to this headline">¶</a></h1>
+<p>This page provides a more detailed explanation on taking cuts in MSlice.</p>
+<section id="cutting-from-the-gui">
+<span id="id1"></span><h2><span class="section-number">2.1. </span>Cutting from the GUI<a class="headerlink" href="#cutting-from-the-gui" title="Permalink to this headline">¶</a></h2>
+<p>The cut tab will be disabled by default, and enabled when you click on a cuttable workspace. This is either a loaded
+<strong>non-PSD</strong> dataset (see <a class="reference internal" href="quickstart.html#psd-and-non-psd-modes"><span class="std std-ref">PSD and non-PSD modes</span></a>), or a <strong>PSD</strong> dataset for which you have done a <code class="docutils literal notranslate"><span class="pre">Calculate</span>
+<span class="pre">Projection</span></code> (converted to an <code class="docutils literal notranslate"><span class="pre">MD</span> <span class="pre">Event</span></code> type workspace).</p>
+<img alt="_images/cut_panel.png" src="_images/cut_panel.png" />
+<p>To plot a single cut, fill in values for the cut axis, labelled <code class="docutils literal notranslate"><span class="pre">along</span></code>, its limits (<code class="docutils literal notranslate"><span class="pre">from</span></code> and <code class="docutils literal notranslate"><span class="pre">to</span></code>), and the step
+size. For <strong>non-PSD</strong> datasets you also have to select the axes <code class="docutils literal notranslate"><span class="pre">over</span></code> which to integrate, and the integration range.
+One of the cut or integration axis must be <em>energy transfer</em> in this case. For a <strong>PSD</strong> dataset, the <code class="docutils literal notranslate"><span class="pre">Calculate</span> <span class="pre">Projection</span></code>
+step specifies the two axes already. The axis which is not selected to plot <code class="docutils literal notranslate"><span class="pre">along</span></code> is implicitly used as the integration
+axis.</p>
+<p>If you type <code class="docutils literal notranslate"><span class="pre">0</span></code> in or leave the <code class="docutils literal notranslate"><span class="pre">step</span></code> input box empty, the default step size, determined from the data will be used.
+You must specify values for the cut limits and integration range, however.</p>
+<p>Multiple cuts can be plotted from the same dataset simultaneously by specifying an integration <code class="docutils literal notranslate"><span class="pre">width</span></code>. This will produce
+cuts between the specified integration minimum and maximum with the specified width, with the last cut being the remainder.
+For example, if <code class="docutils literal notranslate"><span class="pre">from</span></code> is <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">to</span></code> is <code class="docutils literal notranslate"><span class="pre">10</span></code> and <code class="docutils literal notranslate"><span class="pre">width</span></code> is <code class="docutils literal notranslate"><span class="pre">3</span></code>, clicking <code class="docutils literal notranslate"><span class="pre">Plot</span></code> will overplot 4 cuts which
+integrate over [0,3], [3,6], [6,9] and [9,10] respectively.</p>
+<p>Cuts with the same range from multiple datasets can be plotted by first selecting multiple workspaces in the left panel.</p>
+<p>There are two different methods to compute cuts: <code class="docutils literal notranslate"><span class="pre">Rebin</span></code> and <code class="docutils literal notranslate"><span class="pre">Integration</span></code>.
+<strong>NOTE: for mantid major releases from</strong> <code class="docutils literal notranslate"><span class="pre">v6.40</span></code><strong>, the default cutting algorithm has been changed from</strong> <code class="docutils literal notranslate"><span class="pre">Rebin</span></code>
+<strong>to</strong> <code class="docutils literal notranslate"><span class="pre">Integration</span></code><strong>. For more detail on this change, and cutting algorithms in general, see the</strong> <em>Cutting Algorithms</em>
+<strong>section below</strong>.</p>
+<p>Clicking on the <code class="docutils literal notranslate"><span class="pre">Norm</span> <span class="pre">to</span> <span class="pre">1</span></code> check box will cause the resulting cut data to be normalised such that the maximum of the data
+of each cut is unity.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Over</span></code> button allows you to overplot data on the same figure window without first clearing the current data. Note
+that no check is made about whether the cuts makes sense (e.g. it is possible to plot a <em>Q</em> cut over an energy cut or vice
+versa).</p>
+<p>Finally, the cut figures have the same <code class="docutils literal notranslate"><span class="pre">Keep</span></code> / <code class="docutils literal notranslate"><span class="pre">Make</span> <span class="pre">Current</span></code> window management system introduced in the original
+Matlab MSlice as the slices. Clicking <code class="docutils literal notranslate"><span class="pre">Plot</span></code> will send data to the <strong>Current</strong> figure window, clearing whatever was
+previously plotted there. Clicking <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Over</span></code> sends data to the <strong>Current</strong> figure window but plotting over data already
+there. If you wish to have a fresh plot but to keep the data in a particular plot figure window, click <code class="docutils literal notranslate"><span class="pre">Keep</span></code>. To make
+a <strong>Kept</strong> figure <strong>Current</strong> again (for example to use <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Over</span></code>), click <code class="docutils literal notranslate"><span class="pre">Make</span> <span class="pre">Current</span></code>.
+See <a class="reference internal" href="quickstart.html#keep-make-current"><span class="std std-ref">Keep / Make Current</span></a> for more details.</p>
+<a class="reference internal image-reference" href="_images/cut_options.png"><img alt="_images/cut_options.png" src="_images/cut_options.png" style="width: 530.4px; height: 584.8000000000001px;" /></a>
+<p>You can edit the axes limits, scale and titles by double-clicking on the relevant axis in the plot window. Clicking on each
+plot line will also allow you to change its colour and symbol. These functionalities are also accessible from the options
+button (the cog symbol) in the plot figure toolbar.</p>
+</section>
+<section id="overplotting-powder-lines">
+<h2><span class="section-number">2.2. </span>Overplotting powder lines<a class="headerlink" href="#overplotting-powder-lines" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/powder_lines.png"><img alt="_images/powder_lines.png" src="_images/powder_lines.png" style="width: 481.2px; height: 378.59999999999997px;" /></a>
+<p>To help with a “first look” data analysis, <em>MSlice</em> can overplot on the cuts the positions of powder reflections from common
+sample environment materials (Aluminium, Copper, Niobium and Tantalum). These functionalities may be accessed from the
+<code class="docutils literal notranslate"><span class="pre">Information</span></code> menu option as shown above.</p>
+<p>Powder reflections from an arbitrary crystallographic information format (CIF) file can also be
+plotted but note that we use the <a class="reference external" href="https://pypi.python.org/pypi/PyCifRW/4.3">PyCifRW</a> package to read CIF files and that
+some files generated by FullProf or GSAS may not be readable. In these cases, please load the files in <a class="reference external" href="http://jp-minerals.org/vesta/en">Vesta</a> or <a class="reference external" href="http://openbabel.org">OpenBabel</a> and resave them.</p>
+</section>
+<section id="saving-cuts">
+<h2><span class="section-number">2.3. </span>Saving cuts<a class="headerlink" href="#saving-cuts" title="Permalink to this headline">¶</a></h2>
+<p>Each time you click <code class="docutils literal notranslate"><span class="pre">Plot</span></code> or <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Over</span></code> an <code class="docutils literal notranslate"><span class="pre">MD</span> <span class="pre">Histo</span></code> type workspace is created, and can be accessed from the
+corresponding tab. This workspace can be saved to Nexus (<code class="docutils literal notranslate"><span class="pre">nxs</span></code>), Matlab (<code class="docutils literal notranslate"><span class="pre">mat</span></code>) or ASCII (<code class="docutils literal notranslate"><span class="pre">txt</span></code> or <code class="docutils literal notranslate"><span class="pre">xye</span></code>) formats.
+<em>MSlice</em> is able to load previously saved Nexus or ASCII cuts from file, but you may only then plot or overplot these cuts
+(further manipulation of the cuts is not allowed, although you may normalise the intensity to unity for the plots).
+The ASCII format is a simple three column <code class="docutils literal notranslate"><span class="pre">x</span></code> - <code class="docutils literal notranslate"><span class="pre">y</span></code> - <code class="docutils literal notranslate"><span class="pre">e</span></code> type format. For <code class="docutils literal notranslate"><span class="pre">mat</span></code> files, three vectors <code class="docutils literal notranslate"><span class="pre">x</span></code>
+(coordinate), <code class="docutils literal notranslate"><span class="pre">y</span></code> (signal) and <code class="docutils literal notranslate"><span class="pre">e</span></code> (uncertainties) are saved.</p>
+<p>From the plot figure window, you can also save the workspace data to the same formats (<code class="docutils literal notranslate"><span class="pre">nxs</span></code>, <code class="docutils literal notranslate"><span class="pre">mat</span></code> and <code class="docutils literal notranslate"><span class="pre">txt</span></code>). In
+addition you can also save the figure as an image, either in <code class="docutils literal notranslate"><span class="pre">png</span></code> or <code class="docutils literal notranslate"><span class="pre">pdf</span></code> formats.</p>
+<p>In order to save a cut from an <a class="reference internal" href="quickstart.html#interactive-cuts"><span class="std std-ref">Interactive Cuts</span></a>, you can click the <code class="docutils literal notranslate"><span class="pre">Save</span></code> icon (floppy disk) direct on the cut
+window, or first click the <code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">Cut</span> <span class="pre">to</span> <span class="pre">Workspace</span></code> button to create an <code class="docutils literal notranslate"><span class="pre">MD</span> <span class="pre">Histo</span></code> type workspace and then use the <code class="docutils literal notranslate"><span class="pre">Save</span></code> button on
+that tab.</p>
+<p>When MSlice is used as a Mantid interface <code class="docutils literal notranslate"><span class="pre">MD</span> <span class="pre">Histo</span></code> type workspaces can also be saved to Mantid Workbench by clicking the
+<code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">to</span> <span class="pre">Workbench</span></code> button either on the <code class="docutils literal notranslate"><span class="pre">MD</span> <span class="pre">Histo</span></code> or the <code class="docutils literal notranslate"><span class="pre">Cut</span></code> tab.</p>
+</section>
+<section id="cutting-algorithms">
+<span id="id2"></span><h2><span class="section-number">2.4. </span>Cutting Algorithms<a class="headerlink" href="#cutting-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>There are two different methods used to compute cuts:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Integration</span></code> sums the (signal <img class="math" src="_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/> bin width) in the integration range.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Rebin</span></code> averages the signal in the integration range.</p></li>
+</ul>
+<p>The two methods are described in more detail in the <a class="reference internal" href="math_ref.html#mathematical-reference"><span class="std std-ref">Mathematical Reference</span></a>,
+but in short, there is a bin-dependent conversion factor between the two types of
+cuts which depends on the data coverage in the integration range of that bin.
+That is, if the integration range does not include regions without data
+(e.g. due to kinematic constraints), then the two cuts will be equivalent except
+for a constant scaling factor (proportional to the integration range).
+However, if the integration range overlaps regions without data,
+then the two cuts will give markedly different results.</p>
+<p>The default method is <code class="docutils literal notranslate"><span class="pre">Rebin</span></code> and is more suitable for DOS-types cuts which
+integrate over <img class="math" src="_images/math/03aee60ec0d5d7064d95c77e43648c9b14bea2a9.png" alt="|Q|"/> whilst if you are interested in cross-sections and
+are integrating over energy transfer, it is recommended to use <code class="docutils literal notranslate"><span class="pre">Integration</span></code>.</p>
+<p>There is an option in the <code class="docutils literal notranslate"><span class="pre">Cut</span></code> tab to change the cut algorithm from <code class="docutils literal notranslate"><span class="pre">Rebin</span></code>
+to <code class="docutils literal notranslate"><span class="pre">Integration</span></code> or vice versa and this setting will be saved for subsequent
+similar cuts on the same workspace.</p>
+<p>You can also change the default using the <code class="docutils literal notranslate"><span class="pre">Options</span></code> menu, <code class="docutils literal notranslate"><span class="pre">Cut</span> <span class="pre">algorithm</span> <span class="pre">default</span></code>
+entry. This will change the default cut algorithm <em>for this session of MSlice</em>
+(the default algorithm will revert to <code class="docutils literal notranslate"><span class="pre">Rebin</span></code> if you restart MSlice).</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. Taking Cuts</a><ul>
+<li><a class="reference internal" href="#cutting-from-the-gui">2.1. Cutting from the GUI</a></li>
+<li><a class="reference internal" href="#overplotting-powder-lines">2.2. Overplotting powder lines</a></li>
+<li><a class="reference internal" href="#saving-cuts">2.3. Saving cuts</a></li>
+<li><a class="reference internal" href="#cutting-algorithms">2.4. Cutting Algorithms</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="quickstart.html"
+                          title="previous chapter"><span class="section-number">1. </span>Quick Start</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="slicing.html"
+                          title="next chapter"><span class="section-number">3. </span>Taking Slices</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cutting.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="slicing.html" title="3. Taking Slices"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="1. Quick Start"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MSlice 2.3.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Taking Cuts</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Mantid Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
